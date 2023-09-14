@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "isready",
+        "mapstructure",
         "migrationup",
+        "oneof",
         "sqlc"
     ]
 }

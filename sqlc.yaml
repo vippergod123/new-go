@@ -4,6 +4,12 @@ sql:
     queries: "./db/query"
     schema: "./db/migration"
     gen:
-      go:
+      go: 
         package: "db"
         out: "db/sqlc"
+        emit_json_tags: true
+        emit_prepared_queries: false
+        emit_interface: false
+        emit_exact_table_names: false
+        emit_empty_slices: true
+  
