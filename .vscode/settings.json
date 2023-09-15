@@ -1,8 +1,9 @@
 {
     "cSpell.words": [
+        "gomock",
         "isready",
         "mapstructure",
-        "migrationup",
+        "mockdb",
         "oneof",
         "sqlc"
     ]
