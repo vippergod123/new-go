@@ -10,47 +10,49 @@ import (
 	"github.com/vipeergod123/simple_bank/util"
 )
 
-func createAccountTesting(t *testing.T) Account {
-	user := createUserTesting(t)
-	arg := CreateAccountParams{
-		Owner:    user.Username,
-		Balance:  util.RandomMoney(),
-		Currency: util.RandomCurrency(),
+func createUserTesting(t *testing.T) User {
+	arg := CreateUserParams{
+		Username:       util.RandomName(),
+		HashedPassword: util.RandomString(10),
+		Email:          util.RandomEmail(),
+		FullName:       util.RandomName(),
 	}
 
-	account, err := testQueries.CreateAccount(context.Background(), arg)
+	user, err := testQueries.CreateUser(context.Background(), arg)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, account)
+	require.NotEmpty(t, user)
 
-	require.Equal(t, arg.Owner, account.Owner)
-	require.Equal(t, arg.Balance, account.Balance)
-	require.Equal(t, arg.Currency, account.Currency)
+	require.Equal(t, arg.Username, user.Username)
+	require.Equal(t, arg.HashedPassword, user.HashedPassword)
+	require.Equal(t, arg.Email, user.Email)
+	require.Equal(t, arg.FullName, user.FullName)
 
-	require.NotZero(t, account.ID)
-	require.NotZero(t, account.CreatedAt)
-	return account
+	require.NotZero(t, user.CreatedAt)
+	require.True(t, user.PasswordChangedAt.IsZero())
+	return user
 }
-func TestCreateAccount(t *testing.T) {
-	createAccountTesting(t)
+func TestCreateUser(t *testing.T) {
+	createUserTesting(t)
 }
 
-func TestGetAccount(t *testing.T) {
-	actual := createAccountTesting(t)
-	expected, err := testQueries.GetAccount(context.Background(), actual.ID)
+func TestGetUser(t *testing.T) {
+	expected := createUserTesting(t)
+	actual, err := testQueries.GetUser(context.Background(), expected.Username)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, expected)
+	require.NotEmpty(t, actual)
 
-	require.Equal(t, expected.Owner, actual.Owner)
-	require.Equal(t, expected.Balance, actual.Balance)
-	require.Equal(t, expected.Currency, actual.Currency)
+	require.Equal(t, actual.Username, expected.Username)
+	require.Equal(t, actual.HashedPassword, expected.HashedPassword)
+	require.Equal(t, actual.Email, expected.Email)
+	require.Equal(t, actual.FullName, expected.FullName)
 
-	require.NotZero(t, expected.ID)
-	require.NotZero(t, expected.CreatedAt)
+	require.NotZero(t, actual.CreatedAt)
+	require.True(t, actual.PasswordChangedAt.IsZero())
 }
 
-func TestUpdateAccount(t *testing.T) {
+func TestUpdateUser(t *testing.T) {
 	account := createAccountTesting(t)
 	arg := UpdateAccountParams{
 		ID:      account.ID,
@@ -69,7 +71,7 @@ func TestUpdateAccount(t *testing.T) {
 	require.WithinDuration(t, account.CreatedAt, expected.CreatedAt, time.Second)
 }
 
-func TestDeleteAccount(t *testing.T) {
+func TestDeleteUser(t *testing.T) {
 	actual := createAccountTesting(t)
 	err := testQueries.DeleteAccount(context.Background(), actual.ID)
 	require.NoError(t, err)
@@ -80,7 +82,7 @@ func TestDeleteAccount(t *testing.T) {
 	require.Empty(t, removeAcc)
 }
 
-func TestListAccount(t *testing.T) {
+func TestListUser(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		createAccountTesting((t))
 	}
