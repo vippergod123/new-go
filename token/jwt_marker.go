@@ -30,7 +30,6 @@ func (marker *JWTMarker) CreateToken(username string, duration time.Duration) (s
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, payload)
 	return jwtToken.SignedString([]byte(marker.secretKey))
 }
-
 func (marker *JWTMarker) VerifyToken(token string) (*Payload, error) {
 	keyFunc := func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
