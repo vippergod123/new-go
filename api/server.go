@@ -22,7 +22,7 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	tokenMarker, err := token.NewJWTMarker(config.TokenKey)
 
 	if err != nil {
-		return nil, fmt.Errorf("Cannot create token: %w", err)
+		return nil, fmt.Errorf("cannot create token: %w", err)
 	}
 	server := &Server{store: store, config: config, tokenMarker: tokenMarker}
 
