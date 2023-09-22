@@ -47,7 +47,10 @@ func (server *Server) setupRouter() {
 	router.POST("/users", server.createUser)
 	router.GET("/users/:username", server.getUser)
 	// login
-	authRoutes.POST("/login", server.loginUser)
+	router.POST("/login", server.loginUser)
+
+	// health
+	router.GET("/health", server.checkHeath)
 	server.router = router
 }
 
